@@ -131,10 +131,10 @@ const _webpage = (req, res) => {
 
 const server = http.createServer((req, res) => {
     /* section for api */
-    if (req.method === "POST" && req.url === "/getInterest")
+    if (req.method === "POST" && req.url === "/postInterest")
         _api_post_interest(req,res);
 
-    else if (req.method === "POST" && req.url === "/getPrereqs")
+    else if (req.method === "POST" && req.url === "/postPrereqs")
         _api_post_prereqs(req,res);
 
     /* webpage functionality */
