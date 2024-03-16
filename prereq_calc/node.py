@@ -8,6 +8,20 @@ class ClassNode():
         self.period = class_period
         self.required = True if class_required == 1 else False
     
+    # def expand_prereqs(self, data):
+    #     for full_prereq in self.prereq_names:
+    #             for prereq in full_prereq.split("+"):
+                
+    #                 # check if the prereq node was already made in data
+    #                 prereq_node = data.get(prereq, None)
+    #                 # if node was found in data
+    #                 if (prereq_node != None):
+    #                     prereq_node.expand_prereqs(data) # recursively expand the other nodes
+    #                     self.prereqs.append(prereq_node)
+    #                 else:
+    #                     # if prereq is not in data because it is not a class (e.g. "Senior standing")
+    #                     self.prereqs.append(ClassNode(prereq, [], None, None, 0))
+
     def expand_prereqs(self, data):
         for full_prereq in self.prereq_names:
                 for prereq in full_prereq.split("+"):
@@ -49,13 +63,23 @@ class ClassNode():
     def get(self):
         return self.name
 
+    # def __str__(self):
+    #     final = f"{{ \"target\" : \"{self.name}\", "
+    #     i = 0
+    #     for prereq in self.go_through():
+    #         final +=  f"\"prereq{i}\" : \"{prereq.get()}\", "
+    #         i += 1
+    #     return f"{final[:-2]} }}" # slice to -1 to remove last comma and space
+
     def __str__(self):
-        final = f"{{ target : {self.name}, "
-        i = 0
-        for prereq in self.go_through():
-            final +=  f"prereq{i} : {prereq.get()}, "
-            i += 1
-        return final + " }"
+        final = ""
+        for prereq in self.prereq_names:
+            final += prereq
+        
+        for preNode in self.go_through():
+            for req in preNode.prereq_names:
+                final += req
+        return final
     
     def __eq__(self, rhs):
         if (isinstance(rhs, ClassNode)):

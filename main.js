@@ -3,7 +3,7 @@ const fs = require("node:fs");
 const path = require("node:path");
 const { spawnSync } = require("node:child_process"); // use spawnSync, not exec or spawn, to block while waiting for python script to finish
 
-const HOSTNAME = "127.0.0.1";
+const HOSTNAME = "0.0.0.0";
 const PORT = 8080;
 
 const _api_post_interest = (req, res) => {
@@ -24,7 +24,7 @@ const _api_post_interest = (req, res) => {
             
             /* if all is successful so far, run the ai with the sent data */
             console.log(`Executing with ${interest}`);
-            const aiProc = spawnSync("python3", ["prereq_calc/ai.py", `"${interest}"`]); // wrap interest in quotes so shell takes in spaces in prompt
+            const aiProc = spawnSync("python3", ["prereq_calc/ai.py", interest]);
             
             if (aiProc.error) {
                 // if some general error happened... log it and tell the user
@@ -65,16 +65,16 @@ const _api_post_prereqs = (req, res) => {
         try {
             /* expecting json (client js sends json). decode it here */
             const data = JSON.parse(body);
-            const target = data.interestEntry;
-            console.log('Received target: ', target);
+            const target = data.target;
+            console.log('Received target:', target);
             
             /* if all is successful so far, run the ai with the sent data */
             console.log(`Getting ${target} prereqs`);
-            const prereqsProc = spawnSync("python3", ["prereq_calc/prereq_calc.py", `"${target}"`]); // wrap target in quotes so shell takes in spaces in prompt
+            const prereqsProc = spawnSync("python3", ["prereq_calc/prereq_calc.py", target]);
             
             if (prereqsProc.error) {
                 // if some general error happened... log it and tell the user
-                console.erroAr('Error executing Python script: ', prereqsProc.error);
+                console.error('Error executing Python script: ', prereqsProc.error);
                 res.writeHead(500, { 'Content-Type': 'text/plain' });
                 res.end('Internal error!');
             } else if (prereqsProc.status !== 0) {

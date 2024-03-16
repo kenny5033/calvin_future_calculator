@@ -19,9 +19,9 @@ class PreReqCalc():
 
             for row in class_nodes_info:
                 # set up each row's prereqs section to be a list
-                row[2] = row[2].replace(" AND ", "+")
-                if row[2] == '': row[2] = list()
-                else: row[2] = row[2].split(" OR ")
+                # row[2] = row[2].replace(" AND ", "+")
+                # if row[2] == '': row[2] = list()
+                # else: row[2] = row[2].split(" OR ")
                 
                 # make the node
                 name: str = row[0] + row[1]
@@ -37,6 +37,5 @@ class PreReqCalc():
         self.tree = PreReqTree(self.target, self.data)
         self.tree.generate_report()
     
-
 if __name__ == "__main__":
     prc = PreReqCalc(argv[1], CSVNAME, has_headers = True)

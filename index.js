@@ -29,7 +29,7 @@ interestInput.addEventListener('keydown', event => {
         interestInput.disabled = true; // stop the user from inputting while the server is computing
 
         /* setup */
-        result.textContent = ""
+        result.textContent = "";
 
         /* ✨fun✨ */
         displayFunMessage(); // call at once to not wait for first 5000
@@ -55,9 +55,9 @@ interestInput.addEventListener('keydown', event => {
             response = JSON.parse(response);
             result.innerHTML = `\
             <p>Your recommened classes are</p>\
-            <p><button onclick=getPrereqs()>${response.top_choice}</button></p>\
-            <p><button onclick=getPrereqs()>${response.second_choice}</button></p>\
-            <p><button onclick=getPrereqs()>${response.third_choice}</button></p>`;
+            <p><button class=btn onclick=getPrereqs(this.innerHTML)>${response.top_choice}</button></p>\
+            <p><button class=btn onclick=getPrereqs(this.innerHTML)>${response.second_choice}</button></p>\
+            <p><button class=btn onclick=getPrereqs(this.innerHTML)>${response.third_choice}</button></p>`;
         })
         .catch(error => {
             console.error('Error:', error);
@@ -70,7 +70,8 @@ interestInput.addEventListener('keydown', event => {
     }
 });
 
-const getPrereqs = targetCourse => {
+const getPrereqs = target => {
+    const targetCourse = target;
     fetch('/postPrereqs', {
         method: 'POST',
         headers: {
@@ -88,7 +89,11 @@ const getPrereqs = targetCourse => {
     })
     .then(response => {
         response = JSON.parse(response);
-        prereqResult.textContent = response;
+        // display the response prettily
+        prereqResult.innerHTML = "<p>Prereqs:<p>";
+        Object.values(response).forEach(value => {
+            prereqResult.innerHTML += `<p>${value}</p>`;
+        });
     })
     .catch(error => {
         console.error('Error:', error);
