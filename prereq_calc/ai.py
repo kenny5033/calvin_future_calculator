@@ -7,7 +7,7 @@ import sys
 import json
 
 # Load pre-trained model
-model = SentenceTransformer('roberta-base')
+model = SentenceTransformer('distilbert-base-nli-stsb-mean-tokens')
 
 # Load datasets
 subject_data = pd.read_csv('/home/kenny/projects/hackathon/calvin_future_calculator/fineTuning.csv')
