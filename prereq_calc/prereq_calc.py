@@ -3,7 +3,7 @@ from node import ClassNode
 from tree import PreReqTree
 from sys import argv
 
-CSVNAME = "classNodes.csv"
+CSVNAME = "data/classNodes.csv"
 
 class PreReqCalc():
     def __init__(self, target_class: str, csv_path: str, **kwargs):

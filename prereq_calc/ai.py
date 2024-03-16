@@ -5,13 +5,14 @@ import torch
 # server neccessary imports
 import sys
 import json
+from os import getcwd
 
 # Load pre-trained model
 model = SentenceTransformer('distilbert-base-nli-stsb-mean-tokens')
 
 # Load datasets
-subject_data = pd.read_csv('/home/kenny/projects/hackathon/calvin_future_calculator/fineTuning.csv')
-class_data = pd.read_csv('/home/kenny/projects/hackathon/calvin_future_calculator/classes.csv')
+subject_data = pd.read_csv(f'{getcwd()}/data/fineTuning.csv')
+class_data = pd.read_csv(f'{getcwd()}/data/classes.csv')
 
 class_data["Class Name"] = class_data["Department"] + class_data["Class"].astype(str)
 class_data["NameAndDescr"] = class_data["Name"] + class_data["Description"]
