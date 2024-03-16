@@ -18,14 +18,21 @@ class PreReqCalc():
             if kwargs.get("has_headers", False): next(class_nodes_info, None) 
 
             for row in class_nodes_info:
-                # set up each row's prereqs section to be a list
-                # row[2] = row[2].replace(" AND ", "+")
-                # if row[2] == '': row[2] = list()
-                # else: row[2] = row[2].split(" OR ")
+
+                # set up the prereq relationships (AND/OR) in json format
+                prereqs = [] # this will replace the 2nd row later on
+                for orCourse in row[2].split(" OR "):
+                    split_courses = orCourse.split(" AND ")
+                    if (len(split_courses) > 1):
+                        # if there are courses that have to be taken together
+                        prereqs.append({"relationship" : "AND", "courses" : split_courses})
+                    else:
+                        # does not have to take both (OR)
+                        prereqs.append({"relationship" : "OR", "courses" : split_courses})
                 
                 # make the node
                 name: str = row[0] + row[1]
-                node: ClassNode = ClassNode(name, row[2], row[3], row[4], row[5])
+                node: ClassNode = ClassNode(name, prereqs, row[3], row[4], row[5])
 
                 # if the node is the target
                 if name == target_class:

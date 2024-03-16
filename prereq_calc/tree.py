@@ -1,4 +1,5 @@
 from node import ClassNode
+from json import dumps
 
 class PreReqTree():
 
@@ -9,6 +10,6 @@ class PreReqTree():
         self.head.expand_prereqs(data)
 
     def generate_report(self):
-        #res = self.head.go_through()
-        #print(f"\n\n{[req.name for req in res]}")
-        print(self.head)
+        print(dumps(self.head.get_prereqs_rec())) # json dump the to stdin
+        
+        pass

@@ -90,13 +90,9 @@ const getPrereqs = target => {
     .then(response => {
         response = JSON.parse(response);
         // display the response prettily
-        prereqResult.innerHTML = "<p>Prereqs:<p>";
-        Object.values(response).forEach(value => {
-            prereqResult.innerHTML += `<p>${value}</p>`;
-        });
+        prereqResult.innerHTML = JSON.stringify(response, null, 4);
     })
     .catch(error => {
         console.error('Error:', error);
     })
-
 }
