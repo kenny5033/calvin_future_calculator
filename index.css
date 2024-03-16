@@ -65,12 +65,13 @@ p1
     text-decoration: none;
     border: 2px solid #93c2ec;
     padding: 10px 20px;
-    font-size: 17px;
+    font-size: 20px;
     font-weight: bold;
     background: transparent;
     position: relative;
     transition: all 1s;
     overflow: hidden;
+    box-shadow: 2px 2px 5px #0d0c22;
   }
   
   .btn:hover {
@@ -88,6 +89,7 @@ p1
     background-color: #93c2ec;
     z-index: -1;
     transition: all 1s;
+    box-shadow: 2px 2px 5px #0d0c22;
   }
   
   .btn:hover::before {
