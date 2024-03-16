@@ -9,6 +9,6 @@ class PreReqTree():
         self.head.expand_prereqs(data)
 
     def generate_report(self):
-        res = self.head.go_through()
-        print(f"\n\n{[req.name for req in res]}")
+        #res = self.head.go_through()
+        #print(f"\n\n{[req.name for req in res]}")
         print(self.head)

@@ -52,6 +52,52 @@ const _api_post_interest = (req, res) => {
     });
 }
 
+const _api_post_prereqs = (req, res) => {
+
+    /* agglomorate the data as they come in */
+    let body = '';
+    req.on('data', (chunk) => {
+        body += chunk.toString();
+    });
+
+    /* once the data have all come in, handle it */
+    req.on('end', () => {
+        try {
+            /* expecting json (client js sends json). decode it here */
+            const data = JSON.parse(body);
+            const target = data.interestEntry;
+            console.log('Received target: ', target);
+            
+            /* if all is successful so far, run the ai with the sent data */
+            console.log(`Getting ${target} prereqs`);
+            const prereqsProc = spawnSync("python3", ["prereq_calc/prereq_calc.py", `"${target}"`]); // wrap target in quotes so shell takes in spaces in prompt
+            
+            if (prereqsProc.error) {
+                // if some general error happened... log it and tell the user
+                console.erroAr('Error executing Python script: ', prereqsProc.error);
+                res.writeHead(500, { 'Content-Type': 'text/plain' });
+                res.end('Internal error!');
+            } else if (prereqsProc.status !== 0) {
+                // log stderr for posterity & tell requester that something happened with the script
+                console.error('Script exited with non-zero status code: ', prereqsProc.status);
+                res.writeHead(500, { 'Content-Type': 'text/plain' });
+                res.end('Internal error!');
+            } else {
+                // the results from stdout being sent to the requester
+                console.log('Output: ', prereqsProc.stdout.toString());
+                res.writeHead(200, { 'Content-Type': 'text/plain' });
+                res.end(prereqsProc.stdout);
+            }
+
+            console.log(`Finished finding prereqs for ${target}`);
+        } catch (error) {
+            console.error('Error parsing JSON:', error);
+            res.writeHead(400, { 'Content-Type': 'text/plain' });
+            res.end('Invalid JSON');
+        }
+    });
+}
+
 const _webpage = (req, res) => {
     let requestedFile = "." + req.url; // make the request into a searchable path
     if (requestedFile == "./") requestedFile = "./index.html";
@@ -85,12 +131,15 @@ const _webpage = (req, res) => {
 
 const server = http.createServer((req, res) => {
     /* section for api */
-    if (req.method === 'POST' && req.url === '/postInterest')
-        _api_post_interest(req, res);
+    if (req.method === "POST" && req.url === "/getInterest")
+        _api_post_interest(req,res);
+
+    else if (req.method === "POST" && req.url === "/getPrereqs")
+        _api_post_prereqs(req,res);
 
     /* webpage functionality */
     else
-        _webpage(req, res);
+        _webpage(req,res);
 });
 
 server.listen(PORT, HOSTNAME, () => {

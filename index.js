@@ -23,7 +23,7 @@ const displayFunMessage = () => {
     funMessages.textContent = messages[Math.floor(Math.random() * messages.length)];
 }
 
-interestInput.addEventListener('keydown', function(event) {
+interestInput.addEventListener('keydown', event => {
     if (event.key === 'Enter') {
         interestInput.disabled = true; // stop the user from inputting while the server is computing
 
@@ -32,7 +32,7 @@ interestInput.addEventListener('keydown', function(event) {
         const funMessagesInterval = setInterval(displayFunMessage, 4000);
 
         const interest = interestInput.value;
-        fetch('/postInterest', {
+        fetch('/getInterest', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -65,3 +65,28 @@ interestInput.addEventListener('keydown', function(event) {
         })   
     }
 });
+
+const getPrereqs = targetCourse => {
+    fetch('/getPrereqs', {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ target: targetCourse })
+    })
+    .then(response => {
+        if (response.ok) {
+            result.textContent = 'Data successfully submitted!\n';
+            return response.text();
+        } else {
+            result.textContent = 'Failed to submit data!';
+        }
+    })
+    .then(response => {
+        response = JSON.parse(response);
+        result.innerHTML = response;
+    })
+    .catch(error => {
+        console.error('Error:', error);
+    })
+}

@@ -1,6 +1,7 @@
 from csv import reader
 from node import ClassNode
 from tree import PreReqTree
+from sys import argv
 
 CSVNAME = "classNodes.csv"
 
@@ -38,4 +39,4 @@ class PreReqCalc():
     
 
 if __name__ == "__main__":
-    prc = PreReqCalc("PHYS235", CSVNAME, has_headers = True)
+    prc = PreReqCalc(argv[1], CSVNAME, has_headers = True)
