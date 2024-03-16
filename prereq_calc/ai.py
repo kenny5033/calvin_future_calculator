@@ -37,8 +37,7 @@ for epoch in range(num_epochs):
 class_embeddings_stacked = torch.stack(tuple(class_embeddings))
 
 # Get user input
-# user_input = input("Enter a subject description: ")
-user_input = sys.argv[1] # get from server api
+user_input = sys.argv[1]
 
 # Encode user input
 user_embedding = model.encode(user_input, convert_to_tensor=True)
