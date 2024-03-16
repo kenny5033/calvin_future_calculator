@@ -67,14 +67,14 @@ p1
     padding: 10px 20px;
     font-size: 17px;
     font-weight: bold;
-    background: #f2f2f2;
+    background: transparent;
     position: relative;
     transition: all 1s;
     overflow: hidden;
   }
   
   .btn:hover {
-    color: #93c2ec;
+    color: white;
   }
   
   .btn::before {
